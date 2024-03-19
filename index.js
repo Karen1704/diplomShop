@@ -3,38 +3,34 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv')
 dotenv.config();
 const userRouter = require('./routes/user');
-const movieRouter = require('./routes/movie');
-const directorRouter = require('./routes/director');
-const actorRouter = require('./routes/actor');
-const genreRouter = require('./routes/genre');
-const countryRouter = require('./routes/country');
+const productRourer = require('./routes/product');
+const categoryRouter = require('./routes/category');
 const wishlistRouter = require('./routes/wishlist');
 const reviewRouter = require('./routes/review');
+const cartRouter = require('./routes/cart');
 
 
 
 
 
-mongoose.connect(process.env.MONGO_URL,{
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
+    mongoose.connect(process.env.MONGO_URL,{
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    })
     .then(()=>console.log("Database Connected Successfully!"))
     .catch((err)=>console.log(err))
 
 
-const app = express();
+const app = express()
 app.use(express.json());
 
 
 app.use('/api/users',userRouter);
-app.use('/api/movies',movieRouter);
-app.use('/api/directors',directorRouter);
-app.use('/api/actors',actorRouter);
-app.use('/api/genres',genreRouter);
-app.use('/api/countries',countryRouter);
+app.use('/api/products',productRourer);
+app.use('/api/categories',categoryRouter);
 app.use('/api/wishlist',wishlistRouter);
 app.use('/api/reviews',reviewRouter);
+app.use('/api/carts',cartRouter);
 
 
 

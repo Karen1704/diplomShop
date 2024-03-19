@@ -81,6 +81,30 @@ userRouter.patch('/verify/:verificationCode', async (req, res) => {
   }
 })
 
+//Verify User Get
+userRouter.get('/verify/:verificationCode', async (req, res) => {
+  try {
+    const verificationCode = req.params.verificationCode
+    const user = await User.findOneAndUpdate({ verificationCode }, {
+      $set: {
+        isVerified: true,
+        verificationCode: null
+      }
+    }, { new: true })
+    if (!user) {
+      return res.status(404).send({
+        "Error": "Verification code is expired"
+      })
+    }
+    res.redirect('..')
+  }
+  catch (err) {
+    res.status(400).send({
+      "Error": err.message
+    })
+  }
+})
+
 
 //Reset user password
 userRouter.patch('/passwordReset', async (req, res) => {
@@ -317,7 +341,7 @@ userRouter.post('/logout', auth, async (req, res) => {
 
 
 
-//Make a user admin or movies Manager
+//Make a user admin or products Manager
 userRouter.patch('/changerole/:id', verifyAdmin, async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = ["role"];

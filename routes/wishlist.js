@@ -1,7 +1,7 @@
 const Wishlist = require('../models/Wishlist')
 const wishlistRouter = require('express').Router();
-const Movie = require('../models/Movie')
-const { auth, verifyAdmin, verifyAuthOrAdmin, verifyAdminOrMovieManager } = require('../middleware/auth');
+const Product = require('../models/Product')
+const { auth, verifyAdmin, verifyAuthOrAdmin, verifyAdminOrProductManager } = require('../middleware/auth');
 
 
 wishlistRouter.post('/create', auth, async (req, res) => {
@@ -21,12 +21,12 @@ wishlistRouter.post('/create', auth, async (req, res) => {
 
 wishlistRouter.get('/open', auth, async (req, res) => {
     try {
-        const wishlist = await Wishlist.findOne({ owner: req.user._id }).populate('movies');
+        const wishlist = await Wishlist.findOne({ owner: req.user._id }).populate('products');
 
 
-        wishlist.movies.forEach((movie) => {
-            movie.image = undefined;
-            movie.video = undefined;
+        wishlist.products.forEach((product) => {
+            product.image = undefined;
+            product.video = undefined;
         })
 
 
@@ -38,16 +38,16 @@ wishlistRouter.get('/open', auth, async (req, res) => {
     }
 })
 
-wishlistRouter.post('/add-movie', auth, async (req, res) => {
+wishlistRouter.post('/add-product', auth, async (req, res) => {
     try {
 
         const updatedWishlist = await Wishlist.findOneAndUpdate(
             { owner: req.user._id },
-            { $push: { movies: req.body.movie } },
+            { $push: { products: req.body.product } },
             { new: true }
         );
 
-        const movie = await Movie.findByIdAndUpdate(req.body.movie, {
+        const product = await Product.findByIdAndUpdate(req.body.product, {
             $set: {
                 inWishlist: true
             }
@@ -63,17 +63,17 @@ wishlistRouter.post('/add-movie', auth, async (req, res) => {
     }
 })
 
-wishlistRouter.delete('/remove-movie', auth, async (req, res) => {
+wishlistRouter.delete('/remove-product', auth, async (req, res) => {
     try {
 
         const updatedWishlist = await Wishlist.findOneAndUpdate(
             { owner: req.user._id },
-            { $pull: { movies: req.body.movie } },
+            { $pull: { products: req.body.product } },
             { new: true }
         );
 
 
-        const movie = await Movie.findByIdAndUpdate(req.body.movie, {
+        const product = await Product.findByIdAndUpdate(req.body.product, {
             $set: {
                 inWishlist: false
             }

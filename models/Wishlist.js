@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
 const wishlistSchema = new mongoose.Schema({
-    movies: [{
+    products: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Movie',
+        ref: 'Product',
         required: true,
     }],
     owner: {

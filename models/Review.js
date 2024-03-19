@@ -7,10 +7,10 @@ const reviewSchema = new mongoose.Schema({
     vote:{
         type:Number,
     },
-    movie:{
+    product:{
         type:mongoose.Schema.Types.ObjectId,
         required:true,
-        ref:"Movie"
+        ref:"Product"
     },
     owner: {
         type: mongoose.Schema.Types.ObjectId,

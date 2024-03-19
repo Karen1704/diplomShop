@@ -9,7 +9,7 @@ const sendWelcomeEmail = (email, name, code) => {
     sgMail.send({
         from: "kar.ghalachyan@gmail.com",
         to: email,
-        subject: "Welcome to our Movies App",
+        subject: "Welcome to our Products App",
         html: `<p>Welcome ${name}, click on this  button  to  verify your account</p> <br/>
          <a href=" http://localhost:3000/api/users/verify/${code}"><button>Verify</button></a>`
     }).then(() => {
@@ -24,7 +24,7 @@ const verificationCodeEmail = (email, name, code) => {
     sgMail.send({
         from: "kar.ghalachyan@gmail.com",
         to: email,
-        subject: "Welcome to our Movies App",
+        subject: "Welcome to our Products App",
         html: `<p>Hi! ${name}, click on this  button  to  verify your account</p> <br/>
          <a href=" http://localhost:3000/api/users/verify/${code}"><button>Verify</button></a>`
     }).then(() => {

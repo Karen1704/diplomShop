@@ -73,7 +73,7 @@ const verifyAuthOrAdmin = async (req,res,next)=>{
 }
 
 
-const verifyAdminOrMovieManager = async (req,res,next)=>{
+const verifyAdminOrProductManager = async (req,res,next)=>{
     try{
         const token = req.header("Authorization").replace("Bearer ", "");
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -84,7 +84,7 @@ const verifyAdminOrMovieManager = async (req,res,next)=>{
         if (!user) {
             throw new Error();
         }
-        if(user.role==="admin" || user.role==="movieManager"){
+        if(user.role==="admin" || user.role==="productManager"){
             next();
         }
         else{
@@ -98,4 +98,4 @@ const verifyAdminOrMovieManager = async (req,res,next)=>{
 }
 
 
-module.exports = {auth,verifyAdmin, verifyAuthOrAdmin, verifyAdminOrMovieManager};
+module.exports = {auth,verifyAdmin, verifyAuthOrAdmin, verifyAdminOrProductManager};

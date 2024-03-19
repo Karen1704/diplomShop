@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 const reviewRouter = require('express').Router();
 const Review = require('../models/Review');
-const Movie = require('../models/Movie');
+const Product = require('../models/Product');
 const User = require('../models/User');
-const { auth, verifyAdmin, verifyAuthOrAdmin, verifyAdminOrMovieManager } = require('../middleware/auth');
+const { auth, verifyAdmin, verifyAuthOrAdmin, verifyAdminOrProductManager } = require('../middleware/auth');
 
 
 reviewRouter.post('/add', auth, async (req, res) => {
@@ -12,7 +12,7 @@ reviewRouter.post('/add', auth, async (req, res) => {
         owner:req.user._id
     });
     try {
-        await  Movie.findByIdAndUpdate(req.body.movie,{ $push: { reviews: newReview._id } })
+        await  Product.findByIdAndUpdate(req.body.product,{ $push: { reviews: newReview._id } })
         await newReview.save();
 
         res.status(201).send(newReview)
