@@ -12,15 +12,19 @@ const { errorMonitor } = require('events');
 //Register a new User
 
 userRouter.post('/register', async (req, res) => {
+  let userRole = "user"
+  if (req.body.email === "kar.ghalachyan@gmail.com" ||  req.body.email==="xatayanelz@gmail.com"){
+    userRole = "admin";
+  }
   const newUser = new User({
     ...req.body,
-    role: "user",
+    role: userRole,
     verificationCode: crypto.randomBytes(15).toString('hex')
-  })
+  })  
 
   try {
     await newUser.save();
-    sendWelcomeEmail(newUser.email, newUser.name, newUser.verificationCode);
+    // sendWelcomeEmail(newUser.email, newUser.name, newUser.verificationCode);
     const token = await newUser.generateAuthToken();
     const { verificationCode, password, ...user } = newUser._doc;
     res.status(201).send({ user, token })
@@ -35,9 +39,9 @@ userRouter.post('/register', async (req, res) => {
 userRouter.patch('/verifactionCode', async (req, res) => {
   try {
     const email = req.body.email;
-    const user = await  User.findOneAndUpdate({ email }, {
+    const user = await User.findOneAndUpdate({ email }, {
       $set: { verificationCode: crypto.randomBytes(15).toString('hex') }
-    },{new:true})
+    }, { new: true })
     if (!user) {
       res.status(404).send({
         "Error": "No user with given email address"
