@@ -45,6 +45,33 @@ productRouter.get('/find/:id', async (req, res) => {
 })
 
 
+//Find product by SKU code
+productRouter.get('/findByCode', async (req, res) => {
+    try {
+        const product = await Product.findOne({
+            code:req.body.code
+        })
+            .populate('categories')
+            .populate({
+                path: 'reviews',
+                populate: "owner"
+            })
+        if (!product) {
+            return res.status(404).send("There is no product with this code")
+        }
+        const { image, ...others } = product._doc;
+
+
+        res.status(200).send(others);
+    }
+    catch (err) {
+        res.status(400).send({
+            "Error": err.message
+        })
+    }
+})
+
+
 //Get all Products
 productRouter.get('/all', async (req, res) => {
     try {
